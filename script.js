@@ -306,19 +306,19 @@ document.querySelectorAll('.service-card, .feature-card, .contact-card').forEach
 });
 
 // ==================== SECTION REVEAL ON SCROLL ====================
-const sections = document.querySelectorAll('section');
-const revealSection = (entries, observer) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.style.opacity = '1';
-      entry.target.style.transform = 'translateY(0)';
-    }
-  });
-};
+// const sections = document.querySelectorAll('section');
+// const revealSection = (entries, observer) => {
+//   entries.forEach(entry => {
+//     if (entry.isIntersecting) {
+//       entry.target.style.opacity = '1';
+//       entry.target.style.transform = 'translateY(0)';
+//     }
+//   });
+// };
 
-const sectionObserver = new IntersectionObserver(revealSection, {
-  threshold: 0.1
-});
+// const sectionObserver = new IntersectionObserver(revealSection, {
+//   threshold: 0.1
+// });
 
 sections.forEach(section => {
   section.style.opacity = '0';
@@ -342,13 +342,13 @@ function debounce(func, wait = 10) {
 }
 
 // ==================== PRELOADER ====================
-window.addEventListener('load', () => {
-  document.body.style.opacity = '0';
-  setTimeout(() => {
-    document.body.style.transition = 'opacity 0.3s ease-out'; // Faster fade-in
-    document.body.style.opacity = '1';
-  }, 50); // Reduced delay
-});
+// window.addEventListener('load', () => {
+//   document.body.style.opacity = '0';
+//   setTimeout(() => {
+//     document.body.style.transition = 'opacity 0.3s ease-out'; // Faster fade-in
+//     document.body.style.opacity = '1';
+//   }, 50); // Reduced delay
+// });
 
 // Logo is now a static image; rotate animation removed.
 
