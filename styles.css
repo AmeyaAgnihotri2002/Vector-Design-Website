@@ -728,92 +728,6 @@ footer p{
   }
 }
 
-@media (max-width: 768px) {
-  body { cursor: auto; }
-  .cursor-dot, .cursor-outline { display: none; }
-  
-  nav {
-    padding: 0.8rem 1rem;
-  }
-  
-  .logo {
-    font-size: 1.4rem;
-  }
-  
-  .logo-icon {
-    width: 30px;
-    height: 30px;
-  }
-  
-  nav ul {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: rgba(5,10,20,.98);
-    flex-direction: column;
-    padding: 1rem;
-    gap: 1rem;
-    border-top: 1px solid var(--border-glow);
-  }
-  
-  nav.open ul {
-    display: flex;
-  }
-  
-  .nav-toggle {
-    display: block;
-  }
-  
-  #hero {
-    margin-top: 80px;
-    padding: 1rem;
-  }
-  
-  .hero-title {
-    font-size: clamp(2rem, 8vw, 2.8rem);
-  }
-  
-  .section-title {
-    font-size: clamp(1.8rem, 6vw, 2.4rem);
-  }
-  
-  section {
-    padding: 4rem 1rem;
-  }
-  
-  .workflow-steps,
-  .services-grid,
-  .features-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .projects-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .contact-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .contact-card {
-    max-width: 100%;
-  }
-  
-  .cta-section {
-    padding: 3rem 1.5rem;
-  }
-  
-  .cta-section h3 {
-    font-size: 1.8rem;
-  }
-
-  /* Feature card responsive sizing for tablets */
-  .feature-card {
-    min-height: 280px;
-  }
-}
 
 @media (max-width: 480px) {
   .hero-title {
@@ -846,13 +760,7 @@ footer p{
 }
 
 
-/* Mobile: ALWAYS visible */
-@media (max-width: 768px) {
-  section {
-    opacity: 1 !important;
-    transform: none !important;
-  }
-}
+
 body {
   opacity: 1 !important;
 }

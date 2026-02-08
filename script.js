@@ -1,3 +1,12 @@
+// ==================== CAPABILITY DETECTION ====================
+const canAnimate =
+  window.matchMedia('(hover: hover) and (pointer: fine)').matches &&
+  !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+if (canAnimate) {
+  document.body.classList.add('animate-ready');
+}
+
 const isRealDesktop = window.matchMedia(
   '(hover: hover) and (pointer: fine)'
 ).matches;
@@ -317,27 +326,8 @@ document.querySelectorAll('.service-card, .feature-card, .contact-card').forEach
   });
 });
 
-// ==================== SECTION REVEAL ON SCROLL ====================
-// const sections = document.querySelectorAll('section');
-// const revealSection = (entries, observer) => {
-//   entries.forEach(entry => {
-//     if (entry.isIntersecting) {
-//       entry.target.style.opacity = '1';
-//       entry.target.style.transform = 'translateY(0)';
-//     }
-//   });
-// };
 
-// const sectionObserver = new IntersectionObserver(revealSection, {
-//   threshold: 0.1
-// });
 
-sections.forEach(section => {
-  section.style.opacity = '0';
-  section.style.transform = 'translateY(15px)'; // Reduced from 20px
-  section.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out'; // Faster
-  sectionObserver.observe(section);
-});
 
 // ==================== PERFORMANCE OPTIMIZATION ====================
 // Debounce function for scroll events
@@ -353,16 +343,7 @@ function debounce(func, wait = 10) {
   };
 }
 
-// ==================== PRELOADER ====================
-// window.addEventListener('load', () => {
-//   document.body.style.opacity = '0';
-//   setTimeout(() => {
-//     document.body.style.transition = 'opacity 0.3s ease-out'; // Faster fade-in
-//     document.body.style.opacity = '1';
-//   }, 50); // Reduced delay
-// });
 
-// Logo is now a static image; rotate animation removed.
 
 // ==================== PROJECT CARD OVERLAY ANIMATION ====================
 document.querySelectorAll('.project-card').forEach(card => {
@@ -371,7 +352,7 @@ document.querySelectorAll('.project-card').forEach(card => {
     const tag = this.querySelector('.project-tag');
     
     if (overlay) {
-      overlay.style.opacity = '1';
+      
     }
     if (tag) {
       tag.style.animation = 'slideUp 0.3s ease';
@@ -382,7 +363,7 @@ document.querySelectorAll('.project-card').forEach(card => {
     const overlay = this.querySelector('.project-overlay');
     
     if (overlay) {
-      overlay.style.opacity = '0';
+      
     }
   });
 });
@@ -405,23 +386,21 @@ document.head.appendChild(slideUpStyle);
 
 // ==================== WORKFLOW STEP SEQUENTIAL ANIMATION ====================
 const workflowSteps = document.querySelectorAll('.workflow-step');
-const workflowObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
+if (isRealDesktop && workflowSteps.length > 0) {
+  const workflowObserver = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
       workflowSteps.forEach((step, index) => {
         setTimeout(() => {
-          step.style.opacity = '1';
-          step.style.transform = 'translateY(0)';
-        }, index * 60); // Reduced from 100ms to 60ms
+          step.classList.add('section-visible');
+        }, index * 60);
       });
       workflowObserver.disconnect();
     }
-  });
-}, { threshold: 0.2 });
+  }, { threshold: 0.2 });
 
-if (workflowSteps.length > 0) {
   workflowObserver.observe(workflowSteps[0]);
 }
+
 
 // ==================== RESPONSIVE CHECKS ====================
 function handleResize() {
