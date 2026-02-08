@@ -1,6 +1,3 @@
-// ==================== DEVICE DETECTION ====================
-const isRealDesktop = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-
 // ==================== YEAR UPDATE ====================
 document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -8,9 +5,7 @@ document.getElementById('year').textContent = new Date().getFullYear();
 const cursorDot = document.querySelector('.cursor-dot');
 const cursorOutline = document.querySelector('.cursor-outline');
 
-// const isRealDesktop = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-
-if (isRealDesktop) {
+if (window.innerWidth > 768) {
   let mouseX = 0, mouseY = 0;
   let dotX = 0, dotY = 0;
   let outlineX = 0, outlineY = 0;
@@ -201,15 +196,17 @@ const observerOptions = {
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
-      entry.target.classList.add('section-visible');
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
     }
   });
 }, observerOptions);
 
-// Observe elements on ALL devices (not just desktop)
-document.querySelectorAll(
-  '.workflow-step, .service-card, .project-card, .feature-card'
-).forEach(el => {
+// Observe elements for fade-in animation
+document.querySelectorAll('.workflow-step, .service-card, .project-card, .feature-card').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)'; // Reduced from 30px
+  el.style.transition = 'opacity 0.4s ease-out, transform 0.4s ease-out'; // Faster animation
   observer.observe(el);
 });
 
@@ -308,8 +305,27 @@ document.querySelectorAll('.service-card, .feature-card, .contact-card').forEach
   });
 });
 
+// ==================== SECTION REVEAL ON SCROLL ====================
+const sections = document.querySelectorAll('section');
+const revealSection = (entries, observer) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+};
 
+const sectionObserver = new IntersectionObserver(revealSection, {
+  threshold: 0.1
+});
 
+sections.forEach(section => {
+  section.style.opacity = '0';
+  section.style.transform = 'translateY(15px)'; // Reduced from 20px
+  section.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out'; // Faster
+  sectionObserver.observe(section);
+});
 
 // ==================== PERFORMANCE OPTIMIZATION ====================
 // Debounce function for scroll events
@@ -325,7 +341,16 @@ function debounce(func, wait = 10) {
   };
 }
 
+// ==================== PRELOADER ====================
+window.addEventListener('load', () => {
+  document.body.style.opacity = '0';
+  setTimeout(() => {
+    document.body.style.transition = 'opacity 0.3s ease-out'; // Faster fade-in
+    document.body.style.opacity = '1';
+  }, 50); // Reduced delay
+});
 
+// Logo is now a static image; rotate animation removed.
 
 // ==================== PROJECT CARD OVERLAY ANIMATION ====================
 document.querySelectorAll('.project-card').forEach(card => {
@@ -334,7 +359,7 @@ document.querySelectorAll('.project-card').forEach(card => {
     const tag = this.querySelector('.project-tag');
     
     if (overlay) {
-      
+      overlay.style.opacity = '1';
     }
     if (tag) {
       tag.style.animation = 'slideUp 0.3s ease';
@@ -345,7 +370,7 @@ document.querySelectorAll('.project-card').forEach(card => {
     const overlay = this.querySelector('.project-overlay');
     
     if (overlay) {
-      
+      overlay.style.opacity = '0';
     }
   });
 });
@@ -368,21 +393,23 @@ document.head.appendChild(slideUpStyle);
 
 // ==================== WORKFLOW STEP SEQUENTIAL ANIMATION ====================
 const workflowSteps = document.querySelectorAll('.workflow-step');
-if (workflowSteps.length > 0) {
-  const workflowObserver = new IntersectionObserver((entries) => {
-    if (entries[0].isIntersecting) {
+const workflowObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
       workflowSteps.forEach((step, index) => {
         setTimeout(() => {
-          step.classList.add('section-visible');
-        }, index * 100); // Slightly slower for better visibility
+          step.style.opacity = '1';
+          step.style.transform = 'translateY(0)';
+        }, index * 60); // Reduced from 100ms to 60ms
       });
       workflowObserver.disconnect();
     }
-  }, { threshold: 0.2 });
+  });
+}, { threshold: 0.2 });
 
+if (workflowSteps.length > 0) {
   workflowObserver.observe(workflowSteps[0]);
 }
-
 
 // ==================== RESPONSIVE CHECKS ====================
 function handleResize() {
