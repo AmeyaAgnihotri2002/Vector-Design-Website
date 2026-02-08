@@ -109,10 +109,16 @@ body{
   75% { transform: translate(40px, 40px) scale(1.05); }
 }
 
-/* Hardware acceleration for smooth animations */
-.orb, .workflow-step, .service-card, .feature-card, .project-card, .contact-card, .btn {
-  will-change: transform;
-  transform: translateZ(0);
+/* Hardware acceleration for smooth animations - optimized to avoid conflicts */
+.workflow-step, .service-card, .project-card, .contact-card, .btn {
+  backface-visibility: hidden;
+}
+
+.feature-card {
+  backface-visibility: hidden;
+}
+
+.orb {
   backface-visibility: hidden;
 }
 
@@ -475,7 +481,6 @@ section{
   background-color: var(--bg-card);
   background-size: cover;
   background-position: center;
-  background-attachment: scroll;
   background-repeat: no-repeat;
   border:1px solid var(--border-glow);
   border-radius:12px;
@@ -491,7 +496,7 @@ section{
   overflow: hidden;
 }
 
-/* Dark overlay for text contrast - sits on top of background and blurs */
+/* Dark overlay for text contrast with blur effect */
 .feature-card::after{
   content: '';
   position: absolute;
@@ -499,27 +504,36 @@ section{
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(5, 10, 20, 0.1);
+  background: rgba(5, 10, 20, 0.75);
   backdrop-filter: blur(8px);
-  z-index: 2;
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1;
   pointer-events: none;
+  transition: all 0.3s ease-out;
+}
+
+.feature-card:hover::after {
+  background: rgba(5, 10, 20, 0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 
 /* Ensure content stays on top of overlay */
 .feature-card .feature-title,
 .feature-card .feature-description{
   position: relative;
-  z-index: 3;
+  z-index: 2;
 }
 
-/* WHY VECTOR DESIGN – emoji foreground fix */
+/* Feature icon above overlay */
 .feature-card .feature-icon{
   position: relative;
-  z-index: 3;               /* above ::after overlay */
+  z-index: 2;
   font-size: 2.8rem;
   margin-bottom: 1rem;
   display: inline-block;
   text-shadow: 0 0 12px rgba(0, 217, 255, 0.35);
+  transition: all 0.2s ease-out;
 }
 
 .feature-card:hover{
@@ -528,10 +542,16 @@ section{
   box-shadow:0 15px 30px rgba(0,217,255,.15);
 }
 
+.feature-card:hover .feature-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
 .feature-title{
   font-family:'Oxanium';
   font-size:1.2rem;
-  margin:.5rem 0;
+  margin:.5rem 0 1rem 0;
+  color: var(--text-primary);
+  font-weight: 700;
 }
 
 .feature-description{
@@ -708,26 +728,103 @@ footer p{
 
 /* ==================== RESPONSIVE ==================== */
 
-/* Desktop (1200px+): Larger feature cards with better visibility */
-@media (min-width: 1200px) {
-  .feature-card {
-    min-height: 320px;
-  }
-}
-
-/* Laptop/Small Desktop (1024px-1199px) */
-@media (min-width: 1024px) and (max-width: 1199px) {
-  .feature-card {
-    min-height: 300px;
-  }
-}
-
 @media (max-width: 1024px) {
   .projects-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+  
+  /* Feature cards on tablets */
+  .feature-card {
+    min-height: 280px;
+  }
 }
 
+@media (max-width: 768px) {
+  body { cursor: auto; }
+  .cursor-dot, .cursor-outline { display: none; }
+  
+  nav {
+    padding: 0.8rem 1rem;
+  }
+  
+  .logo {
+    font-size: 1.4rem;
+  }
+  
+  .logo-icon {
+    width: 60px;
+    height: 60px;
+  }
+  
+  nav ul {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(5,10,20,.98);
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+    border-top: 1px solid var(--border-glow);
+  }
+  
+  nav.open ul {
+    display: flex;
+  }
+  
+  .nav-toggle {
+    display: block;
+  }
+  
+  #hero {
+    margin-top: 80px;
+    padding: 1rem;
+  }
+  
+  .hero-title {
+    font-size: clamp(2rem, 8vw, 2.8rem);
+  }
+  
+  .section-title {
+    font-size: clamp(1.8rem, 6vw, 2.4rem);
+  }
+  
+  section {
+    padding: 4rem 1rem;
+  }
+  
+  .workflow-steps,
+  .services-grid,
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .contact-card {
+    max-width: 100%;
+  }
+  
+  .cta-section {
+    padding: 3rem 1.5rem;
+  }
+  
+  .cta-section h3 {
+    font-size: 1.8rem;
+  }
+  
+  /* Feature cards on mobile */
+  .feature-card {
+    min-height: 260px;
+  }
+}
 
 @media (max-width: 480px) {
   .hero-title {
@@ -751,47 +848,41 @@ footer p{
   .feature-title {
     font-size: 1.1rem;
   }
+  
+  .logo-icon {
+    width: 50px;
+    height: 50px;
+  }
 
-  /* Feature card responsive sizing for mobile */
+  /* Feature card responsive sizing for small mobile */
   .feature-card {
-    min-height: 250px;
+    min-height: 240px;
     padding: 1.5rem;
   }
 }
 
-
-
-body {
-  opacity: 1 !important;
-}
-
-/* Desktop-only reveal animation */
-@media (hover: hover) and (pointer: fine) {
-  .workflow-step,
-  .service-card,
-  .project-card,
+/* Large screens - prevent stretching */
+@media (min-width: 1920px) {
   .feature-card {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
-  }
-
-  .workflow-step.section-visible,
-  .service-card.section-visible,
-  .project-card.section-visible,
-  .feature-card.section-visible {
-    opacity: 1;
-    transform: translateY(0);
+    min-height: 320px;
+    max-height: 400px;
   }
 }
 
-/* Mobile safety: always visible */
-@media (hover: none) {
-  .workflow-step,
-  .service-card,
-  .project-card,
-  .feature-card {
-    opacity: 1 !important;
-    transform: none !important;
-  }
+/* ==================== ANIMATION VISIBILITY - WORKS ON ALL DEVICES ==================== */
+.workflow-step,
+.service-card,
+.project-card,
+.feature-card {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.workflow-step.section-visible,
+.service-card.section-visible,
+.project-card.section-visible,
+.feature-card.section-visible {
+  opacity: 1;
+  transform: translateY(0);
 }

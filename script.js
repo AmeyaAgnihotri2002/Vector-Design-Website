@@ -1,15 +1,5 @@
-// ==================== CAPABILITY DETECTION ====================
-const canAnimate =
-  window.matchMedia('(hover: hover) and (pointer: fine)').matches &&
-  !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-if (canAnimate) {
-  document.body.classList.add('animate-ready');
-}
-
-const isRealDesktop = window.matchMedia(
-  '(hover: hover) and (pointer: fine)'
-).matches;
+// ==================== DEVICE DETECTION ====================
+const isRealDesktop = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
 // ==================== YEAR UPDATE ====================
 document.getElementById('year').textContent = new Date().getFullYear();
@@ -203,12 +193,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // ==================== INTERSECTION OBSERVER FOR ANIMATIONS ====================
-
-// Detect REAL desktop (not mobile desktop mode)
-// const isRealDesktop = window.matchMedia(
-//   '(hover: hover) and (pointer: fine)'
-// ).matches;
-
 const observerOptions = {
   threshold: 0.1,
   rootMargin: '0px 0px -50px 0px'
@@ -222,14 +206,12 @@ const observer = new IntersectionObserver((entries) => {
   });
 }, observerOptions);
 
-// Observe elements ONLY on real desktop
-if (isRealDesktop) {
-  document.querySelectorAll(
-    '.workflow-step, .service-card, .project-card, .feature-card'
-  ).forEach(el => {
-    observer.observe(el);
-  });
-}
+// Observe elements on ALL devices (not just desktop)
+document.querySelectorAll(
+  '.workflow-step, .service-card, .project-card, .feature-card'
+).forEach(el => {
+  observer.observe(el);
+});
 
 // ==================== PARALLAX EFFECT ====================
 window.addEventListener('scroll', () => {
@@ -386,13 +368,13 @@ document.head.appendChild(slideUpStyle);
 
 // ==================== WORKFLOW STEP SEQUENTIAL ANIMATION ====================
 const workflowSteps = document.querySelectorAll('.workflow-step');
-if (isRealDesktop && workflowSteps.length > 0) {
+if (workflowSteps.length > 0) {
   const workflowObserver = new IntersectionObserver((entries) => {
     if (entries[0].isIntersecting) {
       workflowSteps.forEach((step, index) => {
         setTimeout(() => {
           step.classList.add('section-visible');
-        }, index * 60);
+        }, index * 100); // Slightly slower for better visibility
       });
       workflowObserver.disconnect();
     }
