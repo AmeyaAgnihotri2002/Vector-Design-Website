@@ -1,3 +1,7 @@
+const isRealDesktop = window.matchMedia(
+  '(hover: hover) and (pointer: fine)'
+).matches;
+
 // ==================== YEAR UPDATE ====================
 document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -5,7 +9,9 @@ document.getElementById('year').textContent = new Date().getFullYear();
 const cursorDot = document.querySelector('.cursor-dot');
 const cursorOutline = document.querySelector('.cursor-outline');
 
-if (window.innerWidth > 768) {
+// const isRealDesktop = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+if (isRealDesktop) {
   let mouseX = 0, mouseY = 0;
   let dotX = 0, dotY = 0;
   let outlineX = 0, outlineY = 0;
@@ -188,6 +194,12 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // ==================== INTERSECTION OBSERVER FOR ANIMATIONS ====================
+
+// Detect REAL desktop (not mobile desktop mode)
+// const isRealDesktop = window.matchMedia(
+//   '(hover: hover) and (pointer: fine)'
+// ).matches;
+
 const observerOptions = {
   threshold: 0.1,
   rootMargin: '0px 0px -50px 0px'
@@ -196,19 +208,19 @@ const observerOptions = {
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
-      entry.target.style.opacity = '1';
-      entry.target.style.transform = 'translateY(0)';
+      entry.target.classList.add('section-visible');
     }
   });
 }, observerOptions);
 
-// Observe elements for fade-in animation
-document.querySelectorAll('.workflow-step, .service-card, .project-card, .feature-card').forEach(el => {
-  el.style.opacity = '0';
-  el.style.transform = 'translateY(20px)'; // Reduced from 30px
-  el.style.transition = 'opacity 0.4s ease-out, transform 0.4s ease-out'; // Faster animation
-  observer.observe(el);
-});
+// Observe elements ONLY on real desktop
+if (isRealDesktop) {
+  document.querySelectorAll(
+    '.workflow-step, .service-card, .project-card, .feature-card'
+  ).forEach(el => {
+    observer.observe(el);
+  });
+}
 
 // ==================== PARALLAX EFFECT ====================
 window.addEventListener('scroll', () => {

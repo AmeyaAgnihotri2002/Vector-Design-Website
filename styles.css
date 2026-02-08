@@ -844,21 +844,7 @@ footer p{
     padding: 1.5rem;
   }
 }
-/* ==================== SAFE SECTION REVEAL ==================== */
 
-/* Desktop animation only */
-@media (min-width: 769px) {
-  section {
-    opacity: 0;
-    transform: translateY(15px);
-    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-  }
-
-  section.section-visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
 /* Mobile: ALWAYS visible */
 @media (max-width: 768px) {
@@ -869,4 +855,35 @@ footer p{
 }
 body {
   opacity: 1 !important;
+}
+
+/* Desktop-only reveal animation */
+@media (hover: hover) and (pointer: fine) {
+  .workflow-step,
+  .service-card,
+  .project-card,
+  .feature-card {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+  }
+
+  .workflow-step.section-visible,
+  .service-card.section-visible,
+  .project-card.section-visible,
+  .feature-card.section-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile safety: always visible */
+@media (hover: none) {
+  .workflow-step,
+  .service-card,
+  .project-card,
+  .feature-card {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
